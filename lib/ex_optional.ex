@@ -1,53 +1,88 @@
 defmodule ExOptional do
-    def to_optional( v ) do
-        case v do
-            { :ok, _ } -> v
-            { :no, _ } -> v
-            _ -> { :ok, v }
+    @moduledoc """
+    `ExOptional` provides a (minimal) set of functions to work with "Optional" types.
+
+    In Elixir, Optional types are really just two-element tuples.  Success Optionals look like
+
+    `{ :ok, value }`
+
+    while failed Optionals have some other value for the first element.  (`ExOptional` uses `:no` by default, but largely doesn't care.)
+
+    Currently, failed Optionals will only have a value of `nil`.  In the future, `ExOptional` may support failed values as well.
+    """
+
+    @doc """
+    Test if an Optional is successful.
+
+    Returns `true` or `false`.
+
+    ## Examples
+
+        iex> ExOptional.success?( { :ok, 123 } )
+        true
+
+    """
+    def success?( opt ) do
+        case opt do
+            { :ok, _ } -> true
+            _ -> false
         end
     end
 
-    def from_optional( o ) do
-        case o do
-            { :ok, v } -> v
+    @doc """
+    Test if an Optional is failed.
+
+    Returns `true` or `false`.
+
+    ## Examples
+
+        iex> ExOptional.fail?( { :ok, 123 } )
+        false
+
+    """
+    def fail?( opt ) do
+        case opt do
+            { :no, _ } -> true
+            _ -> false
+        end
+    end
+
+    @doc """
+    Wrap a value as a success Optional.
+
+    Returns `{ :ok, value }`.
+
+    ## Examples
+
+        iex> ExOptional.to_optional( 123 )
+        { :ok, 123 }
+
+    """
+    def to_optional( value ) do
+        case value do
+            { :ok, _ } -> value
+            { :no, _ } -> value
+            _ -> { :ok, value }
+        end
+    end
+
+    @doc """
+    Unwrap a value from a success Optional.
+
+    ## Examples
+
+        iex> ExOptional.from_optional( { :ok, 123 } )
+        123
+
+        iex> ExOptional.from_optional( { :no, 123 } )
+        nil
+
+    """
+    def from_optional( opt ) do
+        case opt do
+            { :ok, val } -> val
             { :no, _ } -> nil
-            _ -> o
-        end
-    end
-
-    def map_get( map_opt, key ) do
-        case map_opt do
-            { :ok, map } ->
-                { :ok, Map.get( map, key ) }
-            _ ->
-                { :no, nil }
-        end
-    end
-
-    def enum_map( enum_opt, func ) do
-        case enum_opt do
-            { :ok, enum } ->
-                { :ok, Enum.map( enum, func ) }
-            _ ->
-                { :no, nil }
-        end
-    end
-
-    def enum_sort( enum_opt, func ) do
-        case enum_opt do
-            { :ok, enum } ->
-                { :ok, Enum.sort( enum, func ) }
-            _ ->
-                { :no, nil }
-        end
-    end
-
-    def enum_flat_map( enum_opt, func ) do
-        case enum_opt do
-            { :ok, enum } ->
-                { :ok, Enum.flat_map( enum, func ) }
-            _ ->
-                { :no, nil }
+            _ -> opt
         end
     end
 end
