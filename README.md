@@ -1,6 +1,14 @@
 # ExOptional
 
-**TODO: Add description**
+`ExOptional` provides a (minimal) set of functions to work with "Optional" types.
+
+In Elixir, Optional types are really just two-element tuples.  Success Optionals look like
+
+`{ :ok, value }`
+
+while failed Optionals have some other value for the first element.  (`ExOptional` uses `:no` by default, but largely doesn't care.)
+
+Currently, failed Optionals will only have a value of `nil`.  In the future, `ExOptional` may support failed values as well.
 
 ## Installation
 
