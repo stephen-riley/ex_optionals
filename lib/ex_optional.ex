@@ -85,4 +85,48 @@ defmodule ExOptional do
             _ -> opt
         end
     end
+
+    @doc """
+    Apply an Optional to a function.
+
+    ## Examples
+
+        iex> ExOptional.opt_apply( { :ok, [ 1, 2, 3 ] }, &Enum.map/2, fn x -> x * 2 end )
+        { :ok, [ 2, 4, 6 ] }
+
+        iex> ExOptional.opt_apply( { :no, nil }, &Enum.map/2, fn x -> x * 2 end )
+        { :no, nil }
+
+    """
+    def opt_apply( opt, fun, args ) do
+        case opt do
+            { :ok, value } ->
+                adjusted_args = [ value | [ args ] ]
+                { :ok, apply( fun, adjusted_args ) }
+            _ ->
+                { :no, nil }
+        end
+    end
+
+    @doc """
+    Apply an Optional to a function, specified by Module, Function, and Args (MFA).
+
+    ## Examples
+
+        iex> ExOptional.opt_apply( { :ok, [ 1, 2, 3 ] }, Enum, :map, fn x -> x * 2 end )
+        { :ok, [ 2, 4, 6 ] }
+
+        iex> ExOptional.opt_apply( { :no, nil }, Enum, :map, fn x -> x * 2 end )
+        { :no, nil }
+
+    """
+    def opt_apply( opt, module, fun_atom, args ) do
+        case opt do
+            { :ok, value } ->
+                adjusted_args = [ value | [ args ] ]
+                { :ok, apply( module, fun_atom, adjusted_args ) }
+            _ ->
+                { :no, nil }
+        end
+    end
 end

@@ -50,4 +50,24 @@ defmodule ExOptionalTest do
 
         assert O.from_optional( res ) === [ 1, 2, 3 ]
     end
+
+    test "apply with MFA" do
+        res =
+            [ "1", "2" ]
+            |> O.to_optional
+            |> O.opt_apply( Enum, :map, fn x -> x <> x end )
+            |> O.from_optional
+
+        assert res == [ "11", "22" ]
+    end
+
+    test "apply with fn" do
+        res =
+            [ "1", "2" ]
+            |> O.to_optional
+            |> O.opt_apply( &Enum.map/2, fn x -> x <> x end )
+            |> O.from_optional
+
+        assert res == [ "11", "22" ]
+    end
 end
