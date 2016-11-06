@@ -27,7 +27,7 @@ defmodule ExOptional.Mixfile do
             files: [ "lib", "mix.exs", "README.md", "LICENSE*", "test" ],
             maintainers: [ "Stephen Riley" ],
             licenses: [ "GNU LESSER GENERAL PUBLIC LICENSE v3" ],
-            links: %{ "GitHub" => "https://github.com/stephen-riley/ex_lingua_sentence" }
+            links: %{ "GitHub" => "https://github.com/stephen-riley/ex_optionals" }
         ]
     end
 end
